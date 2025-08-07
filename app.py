@@ -42,11 +42,15 @@ ps_nmm2 = ps * 0.1
 A_rod = PI * ds**2 / 4
 A_piston = PI * dk**2 / 4
 
+# ✅ Line Load q
+q = density * g * A_rod  # N/mm
+
+# ✅ Press Stress (input value)
+sd=Fd/3.14/(ds^2-dho^2)*4*1000+q*(l+h)/2/3.14/(ds^2-dho^2)*4*SIN(3.14/180*a)
+
 # ✅ Corrected Push Force (Fd) with units
 Fd = ps_nmm2 * A_piston / 1000  # kN
 
-# ✅ Press Stress (input value)
-sd = ps_nmm2  # N/mm²
 
 # ✅ Resistance Moment
 if dho == 0:
@@ -54,8 +58,7 @@ if dho == 0:
 else:
     Wb = PI * (ds**4 - dho**4) / (32 * ds)
 
-# ✅ Line Load q
-q = density * g * A_rod  # N/mm
+
 
 # ✅ Bending Stress
 sb = q * l**2 / (8 * Wb)

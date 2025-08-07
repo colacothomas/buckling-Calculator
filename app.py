@@ -33,15 +33,18 @@ PI = math.pi
 density = 7.85e-6  # g/mm³
 g = 9.81  # m/s²
 
+# Convert pressure from bar to N/mm²
+ps_nmm2 = ps * 0.1
+
 # Areas
 A_rod = PI * ds**2 / 4
 A_piston = PI * dk**2 / 4
 
-# ✅ Excel-style Push Force: use piston area only
-Fd = ps * A_piston / 1000  # kN
+# ✅ Corrected Push Force (Fd) with units
+Fd = ps_nmm2 * A_piston / 1000  # kN
 
-# ✅ Excel-style Press Stress
-sd = ps  # N/mm² (directly using input value)
+# ✅ Press Stress (input value)
+sd = ps_nmm2  # N/mm²
 
 # ✅ Resistance Moment
 if dho == 0:
@@ -49,7 +52,7 @@ if dho == 0:
 else:
     Wb = PI * (ds**4 - dho**4) / (32 * ds)
 
-# ✅ Line Load q = mass per mm × g
+# ✅ Line Load q
 q = density * g * A_rod  # N/mm
 
 # ✅ Bending Stress
@@ -85,14 +88,14 @@ trial_d = ((Fk * 1000 * (Lk**2)) / (PI**2 * e * (PI / 32)))**(1/3)
 # Output section
 st.header("Results")
 st.write(f"**Line Load q (dead weight):** {q:.2f} N/mm")
-st.write(f"**Push Force Fd:** {Fd:.1f} kN")
-st.write(f"**Press Stress sd:** {sd:.1f} N/mm²")
-st.write(f"**Resistance Moment Wb:** {Wb:.1f} mm³")
-st.write(f"**Bending Stress sb:** {sb:.1f} N/mm²")
-st.write(f"**Buckling Stress sk:** {sk:.1f} N/mm²")
-st.write(f"**Free Buckling Length Lk:** {Lk:.1f} mm")
-st.write(f"**Buckling Force Fk:** {Fk:.1f} kN")
-st.write(f"**Existing Safety Factor Svorh:** {Svorh:.1f}")
+st.write(f"**Push Force Fd:** {Fd:.2f} kN")
+st.write(f"**Press Stress sd:** {sd:.2f} N/mm²")
+st.write(f"**Resistance Moment Wb:** {Wb:.2f} mm³")
+st.write(f"**Bending Stress sb:** {sb:.2f} N/mm²")
+st.write(f"**Buckling Stress sk:** {sk:.2f} N/mm²")
+st.write(f"**Free Buckling Length Lk:** {Lk:.2f} mm")
+st.write(f"**Buckling Force Fk:** {Fk:.2f} kN")
+st.write(f"**Existing Safety Factor Svorh:** {Svorh:.2f}")
 st.write(f"**Boundary Line (Euler/Johnson):** {boundary_line:.2f}")
 st.write(f"**Slenderness Ratio (l/k):** {slenderness_ratio:.2f}")
 st.write(f"**Ideal Trial Rod Diameter (Euler):** {trial_d:.2f} mm")

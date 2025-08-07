@@ -2,10 +2,10 @@
 import streamlit as st
 import math
 
-st.title("Piston Rod Buckling Calculator (Excel-Verified)")
+st.title("Piston Rod Buckling Calculator (Excel-Verified)""")
 
 # Sidebar Inputs
-st.sidebar.header("Input Parameters")
+st.sidebar.header("Input Parameters""")
 ps = st.sidebar.number_input("System Pressure (pS) [bar]", value=200.0)
 dk = st.sidebar.number_input("Piston Diameter (Dk) [mm]", value=90.0)
 ds = st.sidebar.number_input("Rod Diameter (Ds) [mm]", value=50.0)
@@ -73,7 +73,7 @@ I = (PI * ds**4) / 64
 Fk = (PI**2 * e * I) / (Lk**2) / 1000  # kN
 
 # ✅ Safety Factor
-Svorh = Fk / Fd if Fd else float("inf")
+Svorh = Fk / Fd if Fd else float("inf""")
 
 # ✅ Radius of gyration
 k_radius = math.sqrt(I / A_rod)
@@ -88,32 +88,32 @@ boundary_line = 2 * PI * math.sqrt(e / (2 * ss))
 trial_d = ((Fk * 1000 * (Lk**2)) / (PI**2 * e * (PI / 32)))**(1/3)
 
 # Output section
-st.header("Results")
-st.write(f"**Line Load q (dead weight):** {q:.2f} N/mm")
-st.markdown(f"**Push Force Fd:** {Fd:.2f} kN  
-Formula: `Fd = pS × π/4 × Dk² ÷ 1000`")
-st.markdown(f"**Press Stress sd:** {sd:.2f} N/mm²  
-Formula: `sd = pS × 0.1`")
-st.markdown(f"**Resistance Moment Wb:** {Wb:.2f} mm³  
-Formula: `Wb = π × Ds³ ÷ 32` (solid rod)")
-st.markdown(f"**Bending Stress sb:** {sb:.2f} N/mm²  
-Formula: `sb = q × L² ÷ (8 × Wb)`")
-st.markdown(f"**Buckling Stress sk:** {sk:.2f} N/mm²  
-Formula: `sk = sd + sb`")
-st.markdown(f"**Free Buckling Length Lk:** {Lk:.2f} mm  
-Formula: `Lk = L × k × √[1 + (H/L)² × sin²(a)]`")
-st.markdown(f"**Buckling Force Fk:** {Fk:.2f} kN  
-Formula: `Fk = π² × E × I ÷ Lk² ÷ 1000`")
-st.markdown(f"**Existing Safety Factor Svorh:** {Svorh:.2f}  
-Formula: `S = Fk ÷ Fd`")
-st.markdown(f"**Boundary Line (Euler/Johnson):** {boundary_line:.2f}  
-Formula: `2π × √(E ÷ 2sS)`")
-st.markdown(f"**Slenderness Ratio (l/k):** {slenderness_ratio:.2f}  
-Formula: `Lk ÷ k_radius`")
-st.markdown(f"**Ideal Trial Rod Diameter (Euler):** {trial_d:.2f} mm  
-Formula: Cubic root of `Fk × Lk² / (π² × E × π/32)`")
+st.header("Results""")
+st.write(f"**Line Load q (dead weight):** {q:.2f} N/mm""")
+st.markdown(f"""**Push Force Fd:** {Fd:.2f} kN  
+Formula: `Fd = pS × π/4 × Dk² ÷ 1000`""")
+st.markdown(f"""**Press Stress sd:** {sd:.2f} N/mm²  
+Formula: `sd = pS × 0.1`""")
+st.markdown(f"""**Resistance Moment Wb:** {Wb:.2f} mm³  
+Formula: `Wb = π × Ds³ ÷ 32` (solid rod)""")
+st.markdown(f"""**Bending Stress sb:** {sb:.2f} N/mm²  
+Formula: `sb = q × L² ÷ (8 × Wb)`""")
+st.markdown(f"""**Buckling Stress sk:** {sk:.2f} N/mm²  
+Formula: `sk = sd + sb`""")
+st.markdown(f"""**Free Buckling Length Lk:** {Lk:.2f} mm  
+Formula: `Lk = L × k × √[1 + (H/L)² × sin²(a)]`""")
+st.markdown(f"""**Buckling Force Fk:** {Fk:.2f} kN  
+Formula: `Fk = π² × E × I ÷ Lk² ÷ 1000`""")
+st.markdown(f"""**Existing Safety Factor Svorh:** {Svorh:.2f}  
+Formula: `S = Fk ÷ Fd`""")
+st.markdown(f"""**Boundary Line (Euler/Johnson):** {boundary_line:.2f}  
+Formula: `2π × √(E ÷ 2sS)`""")
+st.markdown(f"""**Slenderness Ratio (l/k):** {slenderness_ratio:.2f}  
+Formula: `Lk ÷ k_radius`""")
+st.markdown(f"""**Ideal Trial Rod Diameter (Euler):** {trial_d:.2f} mm  
+Formula: Cubic root of `Fk × Lk² / (π² × E × π/32)`""")
 
 if slenderness_ratio < boundary_line:
-    st.success("Slenderness ratio is within Euler limits → Euler method valid")
+    st.success("Slenderness ratio is within Euler limits → Euler method valid""")
 else:
-    st.warning("Slenderness ratio exceeds boundary → Use Johnson method")
+    st.warning("Slenderness ratio exceeds boundary → Use Johnson method""")

@@ -60,7 +60,7 @@ else:
 
 
 # ✅ Bending Stress
-sb = q*(l +h)^2/8/Wb*COS(3.14/180*a)
+sb = (q * (l + h)**2 / (8 * Wb)) * math.cos(math.radians(a))
 
 
 # ✅ Buckling Stress

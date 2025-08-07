@@ -2,7 +2,7 @@
 import streamlit as st
 import math
 
-st.title("Piston Rod Buckling Calculator (Excel-Verified)")
+st.title("Piston Rod Buckling Calculator (Excel-Matched)")
 
 # Sidebar Inputs
 st.sidebar.header("Input Parameters")
@@ -38,60 +38,62 @@ A_rod = PI * ds**2 / 4
 A_piston = PI * dk**2 / 4
 A_annulus = A_piston - A_rod
 
-# Push Force (Excel logic)
-Fd = ps * A_annulus / 1000  # [kN]
+# Push Force Fd
+Fd = ps * A_annulus / 1000  # kN
 
-# Press Stress (Excel logic)
-sd = ps  # [N/mm²], same as system pressure
+# Press Stress sd = Fd / Area_rod
+sd = Fd * 1000 / A_rod  # N/mm²
 
-# Resistance Moment Wb (solid rod or hollow)
+# Resistance Moment Wb
 Wb = (PI * ds**3) / 32 if dho == 0 else PI * (ds**4 - dho**4) / (32 * ds)
 
-# Line Load q (dead weight)
+# Line Load q (based on rod cross-section, gravity, density)
 q = density * g * A_rod  # N/mm
 
-# Bending Stress
-sb = q * l**2 / (8 * Wb)
+# Bending Stress sb
+sb = q * l**2 / (8 * Wb)  # N/mm²
 
-# Buckling Stress
+# Buckling Stress sk
 sk = sd + sb
 
-# Free Buckling Length Lk (with angle correction)
+# Free Buckling Length Lk with angle correction
 Lk = l * k_factor * math.sqrt(1 + (h / l)**2 * math.sin(math.radians(a))**2)
 
-# Moment of Inertia I (solid rod assumed)
+# Moment of Inertia I
 I = (PI * ds**4) / 64
 
 # Buckling Force Fk
-Fk = (PI**2 * e * I) / (Lk**2) / 1000  # [kN]
+Fk = (PI**2 * e * I) / (Lk**2) / 1000  # kN
 
-# Safety Factor
+# Existing Safety Factor
 Svorh = Fk / Fd if Fd != 0 else float('inf')
 
-# Slenderness Ratio
-radius_gyration = math.sqrt(I / A_rod)
-slenderness_ratio = Lk / radius_gyration
+# Radius of gyration
+k_radius = math.sqrt(I / A_rod)
 
-# Euler/Johnson Boundary Line
+# Slenderness Ratio
+slenderness_ratio = Lk / k_radius
+
+# Euler-Johnston boundary
 boundary_line = 2 * PI * math.sqrt(e / (2 * ss))
 
-# Trial Rod Diameter
+# Ideal rod diameter (Euler)
 trial_d = ((Fk * 1000 * (Lk**2)) / (PI**2 * e * (PI / 32)))**(1/3)
 
 # Output
 st.header("Results")
-st.write(f"**Line Load q (dead weight):** {q:.4f} N/mm")
-st.write(f"**Push Force Fd:** {Fd:.5f} kN")
-st.write(f"**Press Stress sd:** {sd:.5f} N/mm²")
-st.write(f"**Resistance Moment Wb:** {Wb:.6f} mm³")
-st.write(f"**Bending Stress sb:** {sb:.6f} N/mm²")
-st.write(f"**Buckling Stress sk:** {sk:.6f} N/mm²")
-st.write(f"**Free Buckling Length Lk:** {Lk:.2f} mm")
-st.write(f"**Buckling Force Fk:** {Fk:.5f} kN")
-st.write(f"**Existing Safety Factor Svorh:** {Svorh:.6f}")
-st.write(f"**Boundary Line (Euler/Johnson):** {boundary_line:.6f}")
-st.write(f"**Slenderness Ratio (l/k):** {slenderness_ratio:.6f}")
-st.write(f"**Ideal Trial Rod Diameter (Euler):** {trial_d:.6f} mm")
+st.write(f"**Line Load q (dead weight):** {q:.2f} N/mm")
+st.write(f"**Push Force Fd:** {Fd:.1f} kN")
+st.write(f"**Press Stress sd:** {sd:.1f} N/mm²")
+st.write(f"**Resistance Moment Wb:** {Wb:.1f} mm³")
+st.write(f"**Bending Stress sb:** {sb:.1f} N/mm²")
+st.write(f"**Buckling Stress sk:** {sk:.1f} N/mm²")
+st.write(f"**Free Buckling Length Lk:** {Lk:.0f} mm")
+st.write(f"**Buckling Force Fk:** {Fk:.1f} kN")
+st.write(f"**Existing Safety Factor Svorh:** {Svorh:.1f}")
+st.write(f"**Boundary Line (Euler/Johnson):** {boundary_line:.2f}")
+st.write(f"**Slenderness Ratio (l/k):** {slenderness_ratio:.2f}")
+st.write(f"**Ideal Piston Rod Diameter:** {trial_d:.2f} mm")
 
 if slenderness_ratio < boundary_line:
     st.success("Slenderness ratio is within Euler limits → Euler method valid")

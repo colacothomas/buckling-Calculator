@@ -39,7 +39,7 @@ A_piston = PI * dk**2 / 4
 A_annulus = A_piston - A_rod
 
 # Push Force Fd
-Fd = ps * A_annulus / 1000  # kN
+Fd = pS × (PI/4 × Dk²) / 1000  # kN
 
 # Press Stress sd = Fd / Area_rod
 sd = Fd * 1000 / A_rod  # N/mm²

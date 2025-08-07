@@ -73,6 +73,9 @@ Lk = k_factor*(l+h)
 I = (PI * ds**4) / 64
 
 # ✅ Buckling Force
+
+Fk = =sk * 3.14 / 4*(ds**2-dho**2) / 1000
+
 Fk = (PI**2 * e * I) / (Lk**2) / 1000  # kN
 
 # ✅ Safety Factor

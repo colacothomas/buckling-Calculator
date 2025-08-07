@@ -1,3 +1,4 @@
+
 import streamlit as st
 import math
 
@@ -27,72 +28,45 @@ k_factor = mounting_options[mounting_label]
 e = st.sidebar.number_input("Elasticity Modulus (E) [N/mm²]", value=210000.0)
 a = st.sidebar.number_input("Installation Angle (a) [°]", value=23.0)
 
-# Calculations
+# Constants
 PI = math.pi
 density = 7.85e-6  # g/mm³
-g = 9.81           # m/s²
+g = 9.81  # m/s²
 
-# Areas
+# Calculations
 A_rod = PI * ds**2 / 4
 A_annulus = PI * (dk**2 - ds**2) / 4
-
-# Push Force
 Fd = ps * A_annulus / 1000  # kN
-
-# Press Stress
 sd = Fd * 1000 / A_rod  # N/mm²
-
-# Resistance Moment Wb
 Wb = (PI * ds**3) / 32 if dho == 0 else PI * (ds**4 - dho**4) / (32 * ds)
-
-# Line Load q (dead weight)
 q = density * g * A_rod  # N/mm
-
-# Bending Stress
 sb = q * l**2 / (8 * Wb)
-
-# Buckling Stress
 sk = sd + sb
-
-# Free Buckling Length Lk
 Lk = l * k_factor * math.sqrt(1 + (h / l)**2 * math.sin(math.radians(a))**2)
-
-# Moment of Inertia I (solid rod assumed)
 I = (PI * ds**4) / 64
-
-# Buckling Force Fk
 Fk = (PI**2 * e * I) / (Lk**2) / 1000  # kN
-
-# Existing Safety Factor
 Svorh = Fk / Fd if Fd != 0 else float('inf')
-
-# Slenderness Ratio
 radius_gyration = math.sqrt(I / A_rod)
 slenderness_ratio = Lk / radius_gyration
-
-# Boundary Line (Euler/Johnson)
 boundary_line = 2 * PI * math.sqrt(e / (2 * ss))
-
-# Trial Rod Diameter (Euler)
 trial_d = ((Fk * 1000 * (Lk**2)) / (PI**2 * e * (PI / 32)))**(1/3)
 
-# Display Results
+# Output
 st.header("Results")
-st.write(f"**Line Load q (dead weight):** {q:.5f} N/mm")
-st.write(f"**Push Force Fd:** {Fd:.3f} kN")
-st.write(f"**Press Stress sd:** {sd:.3f} N/mm²")
-st.write(f"**Resistance Moment Wb:** {Wb:.3f} mm³")
-st.write(f"**Bending Stress sb:** {sb:.3f} N/mm²")
-st.write(f"**Buckling Stress sk:** {sk:.3f} N/mm²")
+st.write(f"**Line Load q (dead weight):** {q:.4f} N/mm")
+st.write(f"**Push Force Fd:** {Fd:.4f} kN")
+st.write(f"**Press Stress sd:** {sd:.5f} N/mm²")
+st.write(f"**Resistance Moment Wb:** {Wb:.6f} mm³")
+st.write(f"**Bending Stress sb:** {sb:.6f} N/mm²")
+st.write(f"**Buckling Stress sk:** {sk:.6f} N/mm²")
 st.write(f"**Free Buckling Length Lk:** {Lk:.2f} mm")
-st.write(f"**Buckling Force Fk:** {Fk:.3f} kN")
-st.write(f"**Existing Safety Factor Svorh:** {Svorh:.3f}")
-st.write(f"**Boundary Line (Euler/Johnson):** {boundary_line:.3f}")
-st.write(f"**Slenderness Ratio (l/k):** {slenderness_ratio:.3f}")
+st.write(f"**Buckling Force Fk:** {Fk:.5f} kN")
+st.write(f"**Existing Safety Factor Svorh:** {Svorh:.6f}")
+st.write(f"**Boundary Line (Euler/Johnson):** {boundary_line:.6f}")
+st.write(f"**Slenderness Ratio (l/k):** {slenderness_ratio:.6f}")
+st.write(f"**Ideal Trial Rod Diameter (Euler):** {trial_d:.6f} mm")
 
 if slenderness_ratio < boundary_line:
     st.success("Slenderness ratio is within Euler limits → Euler method valid")
 else:
     st.warning("Slenderness ratio exceeds boundary → Johnson method recommended")
-
-st.write(f"**Ideal Trial Rod Diameter (Euler):** {trial_d:.3f} mm")

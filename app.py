@@ -46,7 +46,7 @@ A_piston = PI * dk**2 / 4
 q = density * g * A_rod  # N/mm
 
 # ✅ Press Stress (input value)
-sd = (Fd * 1000) / (math.pi * (ds**2 - dho**2) / 4) + q * (l + h) / 2 / (math.pi * (ds**2 - dho**2) / 4) * math.sin(math.radians(a))
+sd = (Fd * 1000) / (math.pi * (Ds**2 - Dho**2) / 4) + q * (L + H) / 2 / (math.pi * (Ds**2 - Dho**2) / 4) * math.sin(math.radians(a))
 
 # ✅ Corrected Push Force (Fd) with units
 Fd = ps_nmm2 * A_piston / 1000  # kN

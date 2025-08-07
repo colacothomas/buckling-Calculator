@@ -59,9 +59,9 @@ else:
     Wb = PI * (ds**4 - dho**4) / (32 * ds)
 
 
-
 # ✅ Bending Stress
-sb = q * l**2 / (8 * Wb)
+sb = q*(l +h)^2/8/Wb*COS(3.14/180*a)
+
 
 # ✅ Buckling Stress
 sk = sd + sb

@@ -87,7 +87,7 @@ k_radius = math.sqrt(I / A_rod)
 Eu = ((64*fd*safety_factor*1000*Lk**2)/(l*PI()^3*e))**0.25
 
 # ✅ Slenderness ratio
-slenderness_ratio = =Lk*4/Eu
+slenderness_ratio = (Lk * 4) / Eu
 
 # ✅ Euler/Johnson boundary
 boundary_line = 2 * PI * math.sqrt(e / (2 * ss))

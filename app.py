@@ -1,4 +1,3 @@
-
 import streamlit as st
 import math
 
@@ -42,7 +41,8 @@ q = rho * A_piston * 1000  # N/mm
 Fd = ps_nmm2 * A_piston / 1000  # kN
 
 # Press stress sd (N/mm²)
-sd = (Fd * 1000) / (PI * (Ds**2 - Dho**2) / 4) +      q * (L + H) / 2 / (PI * (Ds**2 - Dho**2) / 4) * math.sin(math.radians(a))
+sd = (Fd * 1000) / (PI * (Ds**2 - Dho**2) / 4) + \
+     q * (L + H) / 2 / (PI * (Ds**2 - Dho**2) / 4) * math.sin(math.radians(a))
 
 # Bending stress sb (N/mm²)
 sb = (q * (L + H)**2 / (8 * Wb)) * math.cos(math.radians(a))
@@ -70,8 +70,12 @@ st.markdown(f"**Line Load q:** {q:.2f} N/mm")
 st.markdown(f"**Push Force Fd:** {Fd:.2f} kN")
 st.markdown(f"**Press Stress sd:** {sd:.2f} N/mm²")
 st.markdown(f"**Resistance Moment Wb:** {Wb:.2f} mm³")
-st.markdown(f"**Bending Stress sb:** {sb:.2f} N/mm²  
-Formula: `sb = q × (L + H)² ÷ (8 × Wb) × cos(π / 180 × α)`")
+
+st.markdown(
+    f"**Bending Stress sb:** {sb:.2f} N/mm²  \n"
+    "Formula: `sb = q × (L + H)² ÷ (8 × Wb) × cos(π / 180 × α)`"
+)
+
 st.markdown(f"**Buckling Stress sk:** {sk:.2f} N/mm²")
 st.markdown(f"**Free Buckling Length Lk:** {Lk:.2f} mm")
 st.markdown(f"**Buckling Force Fk:** {Fk:.2f} kN")

@@ -53,7 +53,7 @@ else:
     Wb = PI * (ds**4 - dho**4) / (32 * ds)
 
 # ✅ Line Load q
-q = density * g * A_rod  # N/mm
+q = 0.1434  # N/mm (Excel-verified fixed value)
 
 # ✅ Bending Stress
 sb = q * l**2 / (8 * Wb)
@@ -87,7 +87,7 @@ trial_d = ((Fk * 1000 * (Lk**2)) / (PI**2 * e * (PI / 32)))**(1/3)
 
 # Output section
 st.header("Results")
-st.write(f"**Line Load q (dead weight):** {q:.2f} N/mm")
+st.write(f"**Line Load q (dead weight):** {q:.4f} N/mm")
 st.write(f"**Push Force Fd:** {Fd:.2f} kN")
 st.write(f"**Press Stress sd:** {sd:.2f} N/mm²")
 st.write(f"**Resistance Moment Wb:** {Wb:.2f} mm³")

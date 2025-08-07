@@ -29,6 +29,8 @@ e = st.sidebar.number_input("Elasticity Modulus (E) [N/mm²]", value=210000.0)
 a = st.sidebar.number_input("Installation Angle (a) [°]", value=23.0)
 
 # Constants
+g = 9.81  # m/s²
+
 PI = math.pi
 density = 7.85e-6  # g/mm³
 g = 9.81  # m/s²
@@ -53,7 +55,7 @@ else:
     Wb = PI * (ds**4 - dho**4) / (32 * ds)
 
 # ✅ Line Load q
-q = 0.1434  # N/mm (Excel-verified fixed value)
+q = density * g * A_rod  # N/mm
 
 # ✅ Bending Stress
 sb = q * l**2 / (8 * Wb)
@@ -87,18 +89,29 @@ trial_d = ((Fk * 1000 * (Lk**2)) / (PI**2 * e * (PI / 32)))**(1/3)
 
 # Output section
 st.header("Results")
-st.write(f"**Line Load q (dead weight):** {q:.4f} N/mm")
-st.write(f"**Push Force Fd:** {Fd:.2f} kN")
-st.write(f"**Press Stress sd:** {sd:.2f} N/mm²")
-st.write(f"**Resistance Moment Wb:** {Wb:.2f} mm³")
-st.write(f"**Bending Stress sb:** {sb:.2f} N/mm²")
-st.write(f"**Buckling Stress sk:** {sk:.2f} N/mm²")
-st.write(f"**Free Buckling Length Lk:** {Lk:.2f} mm")
-st.write(f"**Buckling Force Fk:** {Fk:.2f} kN")
-st.write(f"**Existing Safety Factor Svorh:** {Svorh:.2f}")
-st.write(f"**Boundary Line (Euler/Johnson):** {boundary_line:.2f}")
-st.write(f"**Slenderness Ratio (l/k):** {slenderness_ratio:.2f}")
-st.write(f"**Ideal Trial Rod Diameter (Euler):** {trial_d:.2f} mm")
+st.write(f"**Line Load q (dead weight):** {q:.2f} N/mm")
+st.markdown(f"**Push Force Fd:** {Fd:.2f} kN  
+Formula: `Fd = pS × π/4 × Dk² ÷ 1000`")
+st.markdown(f"**Press Stress sd:** {sd:.2f} N/mm²  
+Formula: `sd = pS × 0.1`")
+st.markdown(f"**Resistance Moment Wb:** {Wb:.2f} mm³  
+Formula: `Wb = π × Ds³ ÷ 32` (solid rod)")
+st.markdown(f"**Bending Stress sb:** {sb:.2f} N/mm²  
+Formula: `sb = q × L² ÷ (8 × Wb)`")
+st.markdown(f"**Buckling Stress sk:** {sk:.2f} N/mm²  
+Formula: `sk = sd + sb`")
+st.markdown(f"**Free Buckling Length Lk:** {Lk:.2f} mm  
+Formula: `Lk = L × k × √[1 + (H/L)² × sin²(a)]`")
+st.markdown(f"**Buckling Force Fk:** {Fk:.2f} kN  
+Formula: `Fk = π² × E × I ÷ Lk² ÷ 1000`")
+st.markdown(f"**Existing Safety Factor Svorh:** {Svorh:.2f}  
+Formula: `S = Fk ÷ Fd`")
+st.markdown(f"**Boundary Line (Euler/Johnson):** {boundary_line:.2f}  
+Formula: `2π × √(E ÷ 2sS)`")
+st.markdown(f"**Slenderness Ratio (l/k):** {slenderness_ratio:.2f}  
+Formula: `Lk ÷ k_radius`")
+st.markdown(f"**Ideal Trial Rod Diameter (Euler):** {trial_d:.2f} mm  
+Formula: Cubic root of `Fk × Lk² / (π² × E × π/32)`")
 
 if slenderness_ratio < boundary_line:
     st.success("Slenderness ratio is within Euler limits → Euler method valid")

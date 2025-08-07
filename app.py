@@ -97,7 +97,7 @@ Formula: `sd = pS × 0.1`""")
 st.markdown(f"""**Resistance Moment Wb:** {Wb:.2f} mm³  
 Formula: `Wb = π × Ds³ ÷ 32` (solid rod)""")
 st.markdown(f"""**Bending Stress sb:** {sb:.2f} N/mm²  
-Formula: `sb = q × (L + H)² ÷ (8 × Wb) × cos(α)`""")
+Formula: `sb = q × (L + H)² ÷ (8 × Wb) × cos(π / 180 × α)`""")
 st.markdown(f"""**Buckling Stress sk:** {sk:.2f} N/mm²  
 Formula: `sk = sd + sb`""")
 st.markdown(f"""**Free Buckling Length Lk:** {Lk:.2f} mm  

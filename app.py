@@ -84,7 +84,7 @@ k_radius = math.sqrt(I / A_rod)
 
 # ✅ Eulers equation
 
-Eu = =((64*fd*safety_factor*1000*Lk**2)/(l*PI()^3*e))**0.25
+Eu = ((64*fd*safety_factor*1000*Lk**2)/(l*PI()^3*e))**0.25
 
 # ✅ Slenderness ratio
 slenderness_ratio = =Lk*4/Eu

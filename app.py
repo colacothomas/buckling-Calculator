@@ -67,7 +67,7 @@ sb = (q * (l + h)**2 / (8 * Wb)) * math.cos(math.radians(a))
 sk = sd + sb
 
 # ✅ Free Buckling Length with angle
-Lk = l * k_factor * math.sqrt(1 + (h / l)**2 * math.sin(math.radians(a))**2)
+Lk = k*(l+h)
 
 # ✅ Moment of Inertia
 I = (PI * ds**4) / 64

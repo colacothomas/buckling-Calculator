@@ -33,28 +33,55 @@ PI = math.pi
 density = 7.85e-6  # g/mm³
 g = 9.81  # m/s²
 
-# Calculations
+# Areas
 A_rod = PI * ds**2 / 4
-A_annulus = PI * (dk**2 - ds**2) / 4
-Fd = ps * A_annulus / 1000  # kN
-sd = Fd * 1000 / A_rod  # N/mm²
+A_piston = PI * dk**2 / 4
+A_annulus = A_piston - A_rod
+
+# Push Force (Excel logic)
+Fd = ps * A_annulus / 1000  # [kN]
+
+# Press Stress (Excel logic)
+sd = ps  # [N/mm²], same as system pressure
+
+# Resistance Moment Wb (solid rod or hollow)
 Wb = (PI * ds**3) / 32 if dho == 0 else PI * (ds**4 - dho**4) / (32 * ds)
+
+# Line Load q (dead weight)
 q = density * g * A_rod  # N/mm
+
+# Bending Stress
 sb = q * l**2 / (8 * Wb)
+
+# Buckling Stress
 sk = sd + sb
+
+# Free Buckling Length Lk (with angle correction)
 Lk = l * k_factor * math.sqrt(1 + (h / l)**2 * math.sin(math.radians(a))**2)
+
+# Moment of Inertia I (solid rod assumed)
 I = (PI * ds**4) / 64
-Fk = (PI**2 * e * I) / (Lk**2) / 1000  # kN
+
+# Buckling Force Fk
+Fk = (PI**2 * e * I) / (Lk**2) / 1000  # [kN]
+
+# Safety Factor
 Svorh = Fk / Fd if Fd != 0 else float('inf')
+
+# Slenderness Ratio
 radius_gyration = math.sqrt(I / A_rod)
 slenderness_ratio = Lk / radius_gyration
+
+# Euler/Johnson Boundary Line
 boundary_line = 2 * PI * math.sqrt(e / (2 * ss))
+
+# Trial Rod Diameter
 trial_d = ((Fk * 1000 * (Lk**2)) / (PI**2 * e * (PI / 32)))**(1/3)
 
 # Output
 st.header("Results")
 st.write(f"**Line Load q (dead weight):** {q:.4f} N/mm")
-st.write(f"**Push Force Fd:** {Fd:.4f} kN")
+st.write(f"**Push Force Fd:** {Fd:.5f} kN")
 st.write(f"**Press Stress sd:** {sd:.5f} N/mm²")
 st.write(f"**Resistance Moment Wb:** {Wb:.6f} mm³")
 st.write(f"**Bending Stress sb:** {sb:.6f} N/mm²")
